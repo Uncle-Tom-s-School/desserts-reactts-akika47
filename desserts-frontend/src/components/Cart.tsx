@@ -17,7 +17,7 @@ const Cart = () => {
   }
   const { cart } = cartCtx;
 
-  const [visibleCart, setVisisbleCart] = useState<VisibleCartType[]>([]);
+  const [visibleCart, setVisibleCart] = useState<VisibleCartType[]>([]);
 
   useEffect(() => {
     let unique: string[] = [];
@@ -26,21 +26,34 @@ const Cart = () => {
         unique.push(cartItem.name);
       }
     });
-    let tempCart = [];
+    let tempCart: VisibleCartType[] = [];
     unique.forEach((dessert_name) => {
       let counter = 0;
+      let actualItem: CartItemType | undefined = undefined;
       cart.forEach((cartItem) => {
         if (cartItem.name === dessert_name) {
           counter++;
+          if (!actualItem) {
+            actualItem = cartItem;
+          }
         }
       });
+
+      if (actualItem != undefined) {
+        let visibleItem: VisibleCartType = {
+          item: actualItem as CartItemType,
+          quantity: counter,
+        };
+        tempCart.push(visibleItem);
+      }
     });
+    setVisibleCart(tempCart);
   }, [cartCtx]);
 
   return (
     <aside className="cart">
       <h2>Your Cart ({cart.length})</h2>
-      {cart.map((cartitem) => (
+      {visibleCart.map((cartitem) => (
         <CartItem {...cartitem} />
       ))}
     </aside>

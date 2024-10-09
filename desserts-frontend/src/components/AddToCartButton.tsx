@@ -18,7 +18,7 @@ const AddToCartButton = (props: DessertCardProp) => {
   };
   const decrease = () => {
     setQuantity(quantity - 1);
-    let same = cart.filter((dessert) => dessert.name != props.name);
+    let same = cart.filter((dessert) => dessert.name == props.name);
     same.pop();
     setCart([...cart.filter((dessert) => dessert.name != props.name), ...same]);
   };
